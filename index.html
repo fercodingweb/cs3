@@ -855,7 +855,7 @@
     .polaroid .env2 {
       position: absolute;
       left: -14%;
-      bottom: -24%;
+      bottom: -14%;
       width: 64%;
       rotate: 5deg;
       filter: drop-shadow(0 8px 10px rgba(40, 18, 20, .3))
@@ -1243,9 +1243,14 @@
         font-size: 30px
       }
 
+      .s4 .l {
+        height: calc(var(--vh, 1vh)*36)
+      }
+
       .polaroid {
-        width: min(35vw, calc(var(--vh, 1vh)*19));
-        margin-top: 36px
+        width: min(35vw, calc(var(--vh, 1vh)*19.25 - 31.6px));
+        margin: 0 0 12px;
+        align-self: flex-end
       }
 
       .s4 .panel {
@@ -1255,7 +1260,7 @@
 
       .polaroid .env2 {
         left: -30%;
-        bottom: -14%;
+        bottom: -10px;
         width: 64%
       }
 
@@ -1345,7 +1350,7 @@
       }
 
       .polaroid {
-        width: min(30vw, calc(var(--vh, 1vh)*22))
+        width: min(30vw, calc(var(--vh, 1vh)*19.25 - 31.6px))
       }
 
       .iltitle {
