@@ -153,6 +153,13 @@
       display: none
     }
 
+    /* slide dengan tombol Next di bawah (topc dipindah ke bawah): balik reservasi ruang */
+    #s2 .scroll,
+    #s4 .scroll {
+      padding-top: clamp(28px, calc(var(--vh, 1vh)*5), 60px);
+      padding-bottom: clamp(78px, calc(var(--vh, 1vh)*13), 130px)
+    }
+
     /* entrance choreography (runs once per scene, after the iris opens) */
     [data-in] {
       opacity: 0
@@ -271,7 +278,7 @@
 
     .topc {
       position: absolute;
-      top: clamp(14px, calc(var(--vh, 1vh)*4), 34px);
+      bottom: clamp(14px, calc(var(--vh, 1vh)*4), 34px);
       left: 0;
       right: 0;
       display: flex;
@@ -303,9 +310,21 @@
     .head {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
       gap: 12px;
-      padding: clamp(14px, calc(var(--vh, 1vh)*4), 34px) clamp(14px, 3.5vw, 44px) clamp(12px, calc(var(--vh, 1vh)*2.4), 24px)
+      padding: clamp(12px, calc(var(--vh, 1vh)*2.4), 24px) clamp(14px, 3.5vw, 44px) clamp(14px, calc(var(--vh, 1vh)*4), 34px)
+    }
+
+    .head>span:empty {
+      display: none
+    }
+
+    .split .r>.head {
+      order: 2
+    }
+
+    .split .r>.panel {
+      order: 1
     }
 
     .panel {
@@ -1216,14 +1235,9 @@
       }
 
       .split .head {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
         display: flex;
         justify-content: center;
-        padding: 14px 14px 0;
-        z-index: 6
+        padding: 0 14px 14px
       }
 
       .split .r {
