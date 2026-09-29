@@ -991,7 +991,11 @@
       height: 100%;
       width: max-content;
       animation: slideR 40s linear infinite;
-      will-change: transform
+      will-change: transform;
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden
     }
 
     @keyframes slideR {
@@ -1010,7 +1014,9 @@
       background: #fcfaf7;
       padding: 6px 6px 20px;
       rotate: var(--rot, 0deg);
-      box-shadow: 0 14px 24px -12px rgba(30, 10, 12, .55), 0 1px 3px rgba(0, 0, 0, .15)
+      box-shadow: 0 14px 24px -12px rgba(30, 10, 12, .55), 0 1px 3px rgba(0, 0, 0, .15);
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0)
     }
 
     .frame img {
@@ -1811,6 +1817,23 @@
       const $ = (s, r = document) => r.querySelector(s);
       const scenes = [...document.querySelectorAll('.scene')];
       const veil = $('#veil'), bgm = $('#bgm'), muteBtn = $('#mute');
+
+      /* ---------- fix: paksa foto di strip "I Love You" ter-render bersih tiap kali slide muncul ---------- */
+      /* WebKit (Safari/WA/IG in-app browser) kadang gagal repaint layer bermask+animasi setelah
+         disembunyikan, sehingga foto kadang blank/separuh/telat. Solusinya: decode ulang tiap
+         gambar lalu restart animasi track dari nol setiap slide ini diaktifkan. */
+      function refreshHstrip(scene) {
+        const track = scene.querySelector('.htrack');
+        if (!track) return;
+        const imgs = [...scene.querySelectorAll('.frame img')];
+        Promise.all(imgs.map(img => (img.decode ? img.decode().catch(() => { }) : Promise.resolve())))
+          .catch(() => { })
+          .finally(() => {
+            track.style.animation = 'none';
+            void track.offsetHeight;
+            track.style.animation = '';
+          });
+      }
       const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       const setVh = () => document.documentElement.style.setProperty('--vh', (window.innerHeight * .01) + 'px');
       setVh(); addEventListener('resize', setVh); addEventListener('orientationchange', () => setTimeout(setVh, 250));
@@ -1901,6 +1924,7 @@
         to.style.zIndex = 60;
         to.querySelectorAll('.scroll,.panel').forEach(e => e.scrollTop = 0);
         startTyping(to);
+        if (to.id === 's5') refreshHstrip(to);
 
         const finish = () => {
           from.classList.remove('active', 'play');
